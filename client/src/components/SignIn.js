@@ -3,6 +3,9 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import OutlinedInput from '@mui/material/OutlinedInput';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
@@ -13,33 +16,61 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import './SignIn.css'
-
-// function Copyright(props) {
-//   return (
-//     <Typography variant="body2" color="text.secondary" align="center" {...props}>
-//       {'Copyright © '}
-//       <Link color="inherit" href="https://mui.com/">
-//         Your Website
-//       </Link>{' '}
-//       {new Date().getFullYear()}
-//       {'.'}
-//     </Typography>
-//   );
-// }
+import UserTypeSelector from './UserTypeSelector';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 
 const defaultTheme = createTheme();
 
 export default function SignIn() {
-  const handleSubmit = (event) => {
+
+  const [selectedUserType, setSelectedUserType] = React.useState(null); 
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+  let port = 'http://localhost:5001/auth/student/login';
+  let path = '/student-homepage';
+
+  // const handleUserType = (userType) => {
+  //   if(userType == 'student') {
+  //     port = 'http://localhost:5001/auth/student/login';
+  //     path = '/student-homepage';
+  //   }  
+  //   else {
+  //     port = 'http://localhost:5001/auth/teacher/login';
+  //     path = '/teacher-homepage';
+  //   }
+      
+  // };
+
+  ///// trying again
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
+
+   // change port for diff users
+    const response = await fetch(port, {
+       method: 'POST',
+       headers: {
+         'Content-Type': 'application/json',
+       },
+       body: JSON.stringify({ email, password }),
     });
-  };
+
+   
+
+    if (response.ok) {
+       const data = await response.json();
+       localStorage.setItem('token', data.token);
+       //window.location.href = '/';
+       navigate(path)
+    } else {
+       // Authentication failed
+       console.error('Authentication failed');
+    }
+   };
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -60,7 +91,7 @@ export default function SignIn() {
             Sign in
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-            <TextField
+            {/* <TextField
               margin="normal"
               required
               fullWidth
@@ -79,7 +110,30 @@ export default function SignIn() {
               type="password"
               id="password"
               autoComplete="current-password"
-            />
+            /> */}
+            <FormControl fullWidth margin="normal" variant="outlined">
+              <InputLabel htmlFor="outlined-adornment-email">Email Address</InputLabel>
+              <OutlinedInput
+                id="outlined-adornment-email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                label="Email Address"
+              />
+            </FormControl>
+            <FormControl fullWidth margin="normal" variant="outlined">
+              <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
+              <OutlinedInput
+                id="outlined-adornment-password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                label="Password"
+              />
+            </FormControl>
+            {/* <UserTypeSelector>onUserTypeSelected={handleUserType}</UserTypeSelector> */}
+            {/* <UserTypeSelector> onUserTypeChange={setSelectedUserType} </UserTypeSelector> */}
+            <UserTypeSelector></UserTypeSelector>
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
@@ -89,15 +143,8 @@ export default function SignIn() {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-            >
-              Sign In
-            </Button>
+              onClick={(e) => handleSubmit(e)}>Sign In</Button>
             <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
               <Grid item>
                 <Link href="#" variant="body2">
                   {"Don't have an account? Sign Up"}
