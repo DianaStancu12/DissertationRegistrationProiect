@@ -1,6 +1,6 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
-const {handleErrorResponse} = require('../utils');
+const {handleErrorResponse, verifyToken} = require('../utils');
 
 const StudentUser = require('../database/models/StudentUser');
 
@@ -21,6 +21,23 @@ router.get('/', async function (req, res) {
 });
 
 // select by id
+router.get('/:id', async function (req, res) {
+    try {
+        const id = req.params.id;
+
+        const user = await StudentUser.findByPk(id, {
+            attributes: { exclude: ['password'] }
+        });
+
+        if (!user) {
+            res.status(404).json({ success: false, message: 'Error finding user', data: {} });
+        }
+
+        res.status(200).json({ success: true, message: 'User was found', data: user })
+    } catch (error) {
+        handleErrorResponse(res, error, 'Error finding user');
+    }
+})
 
 // insert
 router.post('/', async function (req, res) {
