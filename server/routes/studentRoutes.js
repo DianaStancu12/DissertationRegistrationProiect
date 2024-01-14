@@ -60,4 +60,27 @@ router.post('/', async function (req, res) {
     }
 })
 
+// put == update
+router.put('/:id', async function (req, res) {
+    try {
+        const id = req.params.id;
+
+        const user = await StudentUser.findByPk(id, {
+            attributes: { exclude: ['password'] }
+        });
+
+        if (!user) {
+            res.status(404).json({ success: false, message: 'Error finding user', data: {} });
+        }
+
+        const updatedUser = await user.update(req.body, {
+            attributes: { exclude: ['password'] }
+        });
+
+        res.status(200).json({ success: true, message: "User updated", data: updatedUser });
+    } catch (error) {
+        handleErrorResponse(res, error, 'Error updating user');
+    }
+})
+
 module.exports = router

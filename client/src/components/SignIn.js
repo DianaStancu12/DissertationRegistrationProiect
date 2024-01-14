@@ -65,6 +65,7 @@ export default function SignIn() {
        const data = await response.json();
        localStorage.setItem('token', data.token);
        //window.location.href = '/';
+       console.log(data.token)
        navigate(path)
     } else {
        // Authentication failed

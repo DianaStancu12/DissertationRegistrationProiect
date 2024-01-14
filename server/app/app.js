@@ -19,5 +19,9 @@ app.use('/teachers', teacherRoutes)
 app.use('/auth', authRoutes)
 
 // adauga rute
+//app.get('isUserAuth', verifyToken, studentRoutes);
 
+app.get('isUserAuth', verifyToken, (req, res) => {
+    return res.json("Authenticated");
+})
 module.exports = app

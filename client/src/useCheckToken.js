@@ -13,7 +13,7 @@ function useCheckToken(setLoading, setLoggedIn) {
                 body: JSON.stringify({token})
             }
     
-            fetch(`${process.env.REACT_APP_API_URL}/auth/check`, options)
+            fetch('http://localhost:5001/auth/check', options)
             .then(res => res.json())
             .then(res => {
                 if(res.success) {

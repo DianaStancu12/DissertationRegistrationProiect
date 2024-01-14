@@ -5,6 +5,7 @@ const {handleErrorResponse} = require('../utils');
 
 const StudentUser = require('../database/models/StudentUser');
 const TeacherUser = require('../database/models/TeacherUser');
+const { use } = require('./studentRoutes');
 
 const router = express.Router();
 
@@ -28,11 +29,14 @@ router.post('/student/login', async function(req, res) {
             return res.status(400).json({success: false, message: "Invalid password", data: {}});
         }
 
-        const token = jwt.sign({id: user.dataValues.id}, process.env.TOKEN_SECRET, {
+        const id = user.dataValues.id;
+
+        const token = jwt.sign({id: id}, process.env.TOKEN_SECRET, {
             expiresIn: '1h'
         })
 
-        return res.status(200).json({success: true, message: "User logged in", data: token})
+        return res.status(200).json({success: true, message: "User logged in", data: token, user: user})
+        //res.json({auth:true, token: token, result: user});
     } catch (error) {
         handleErrorResponse(res, error, 'Error logging in');
         //console.log('Error logging in');
@@ -70,5 +74,20 @@ router.post('/teacher/login', async function(req, res) {
     }
 })
 
+router.post('/check', function (req, res) {
+    const token = req.body.token;
+
+    if(!token) {
+        return res.status(404).json({success: false, message: "Token not found", data: {}});
+    }
+
+    const isValidToken = jwt.verify(token, process.env.TOKEN_SECRET);
+
+    if(!isValidToken) {
+        return res.status(400).json({success: false, message: "Invalid token", data: {}});
+    }
+
+    return res.status(200).json({success: true, message: "Valid token", data: token})
+})
 
 module.exports = router;
