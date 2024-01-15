@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './StudentHomepage.css'
+import { jwtDecode } from 'jwt-decode'
 
 const StudentHomepage = () => {
   const [studentName, setStudentName] = useState('');
@@ -13,8 +14,15 @@ const StudentHomepage = () => {
   }, []);
 
   const fetchStudentData = async () => {
-    try {
-            const studentResponse = await fetch('http://localhost:5001/students/1');
+    try {   
+            const token = localStorage.getItem('token');
+            const decodedToken = jwtDecode(token);
+            //console.log(decodedToken.id)
+
+            const id = decodedToken.id;
+            const port = 'http://localhost:5001/students/' + id;
+
+            const studentResponse = await fetch(port);
             const studentData = await studentResponse.json();
             setStudentName(studentData.data.name);
             setHasCoordinator(studentData.hasCoordinator);
