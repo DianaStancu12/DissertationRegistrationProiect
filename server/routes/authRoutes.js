@@ -74,7 +74,6 @@ router.post('/teacher/login', async function(req, res) {
     }
 })
 
-<<<<<<< HEAD
 //SIGN UP
 router.post('/signup', async (req, res) => {
     try {
@@ -110,7 +109,6 @@ router.post('/signup', async (req, res) => {
 ({ message: "Error creating user", error: error.message });
 }
 });
-=======
 router.post('/check', function (req, res) {
     const token = req.body.token;
 
@@ -126,6 +124,5 @@ router.post('/check', function (req, res) {
 
     return res.status(200).json({success: true, message: "Valid token", data: token})
 })
->>>>>>> 9bc46a40078557516f85881cfb0ae7a06e9ac97f
 
 module.exports = router;
