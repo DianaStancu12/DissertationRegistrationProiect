@@ -29,10 +29,36 @@ const StudentHomepage = () => {
     }
   };
 
+  // const fetchStudentData = async () => {
+  //   try {
+  //       const token = localStorage.getItem('token');
+
+  //       const response = await fetch('http://localhost:5001/students/userInfo', {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       });
+
+  //       if (response.ok) {
+  //         const data = await response.json();
+  //         setStudentName(data.data.name);
+  //       } else {
+  //         console.error('Failed to fetch user info');
+  //       }
+
+  //       const professorsResponse = await fetch('http://localhost:5001/teachers/');
+  //       const professorsData = await professorsResponse.json();
+  //       setAvailableProfessors(professorsData);
+  //   }
+  //   catch (error) {
+  //       console.error('Error fetching student data:', error);
+  //   }
+  // }
+
   const handleRequestSubmission = async () => {
     try {
       // Emularea unui apel către server pentru a trimite cererea
-      const response = await fetch('/api/submitRequest', {
+      const response = await fetch('/api/submitequest', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
