@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './StudentHomepage.css'
+import { jwtDecode } from 'jwt-decode'
 
 const StudentHomepage = () => {
   const [studentName, setStudentName] = useState('');
@@ -13,8 +14,15 @@ const StudentHomepage = () => {
   }, []);
 
   const fetchStudentData = async () => {
-    try {
-            const studentResponse = await fetch('http://localhost:5001/students/1');
+    try {   
+            const token = localStorage.getItem('token');
+            const decodedToken = jwtDecode(token);
+            //console.log(decodedToken.id)
+
+            const id = decodedToken.id;
+            const port = 'http://localhost:5001/students/' + id;
+
+            const studentResponse = await fetch(port);
             const studentData = await studentResponse.json();
             setStudentName(studentData.data.name);
             setHasCoordinator(studentData.hasCoordinator);
@@ -29,10 +37,36 @@ const StudentHomepage = () => {
     }
   };
 
+  // const fetchStudentData = async () => {
+  //   try {
+  //       const token = localStorage.getItem('token');
+
+  //       const response = await fetch('http://localhost:5001/students/userInfo', {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       });
+
+  //       if (response.ok) {
+  //         const data = await response.json();
+  //         setStudentName(data.data.name);
+  //       } else {
+  //         console.error('Failed to fetch user info');
+  //       }
+
+  //       const professorsResponse = await fetch('http://localhost:5001/teachers/');
+  //       const professorsData = await professorsResponse.json();
+  //       setAvailableProfessors(professorsData);
+  //   }
+  //   catch (error) {
+  //       console.error('Error fetching student data:', error);
+  //   }
+  // }
+
   const handleRequestSubmission = async () => {
     try {
       // Emularea unui apel către server pentru a trimite cererea
-      const response = await fetch('/api/submitRequest', {
+      const response = await fetch('/api/submitequest', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
