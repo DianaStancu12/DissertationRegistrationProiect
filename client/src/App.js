@@ -1,6 +1,7 @@
 import './App.css';
 import React, { useState } from 'react';
 import SignIn from './components/SignIn';
+import SignUp from './components/SignUp';
 import {BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import StudentHomepage from './components/StudentHomepage'
 import TeacherHomePage from './components/TeacherHomepage';
@@ -27,6 +28,7 @@ function App() {
     // </Router>
     <Router>
       <Routes>
+      <Route path="/signup" element={<SignUp/>} />
         <Route exact path="/" element={<SignIn />} />
         <Route path="/student-homepage" element={<StudentHomepage/>} />
         <Route path="/teacher-homepage" element={<TeacherHomePage/>} />

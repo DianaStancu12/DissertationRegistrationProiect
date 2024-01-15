@@ -20,6 +20,8 @@ import UserTypeSelector from './UserTypeSelector';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+//
+import { Link as RouerLink} from 'react-router-dom';
 // TODO remove, this demo shouldn't need to reset the theme.
 
 const defaultTheme = createTheme();
@@ -32,6 +34,8 @@ export default function SignIn() {
   const navigate = useNavigate();
   let port = 'http://localhost:5001/auth/student/login';
   let path = '/student-homepage';
+
+  //
 
   // const handleUserType = (userType) => {
   //   if(userType == 'student') {
@@ -146,7 +150,7 @@ export default function SignIn() {
               onClick={(e) => handleSubmit(e)}>Sign In</Button>
             <Grid container>
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link component={RouerLink} to="/signup" variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>

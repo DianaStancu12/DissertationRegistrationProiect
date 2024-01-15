@@ -70,5 +70,40 @@ router.post('/teacher/login', async function(req, res) {
     }
 })
 
+//SIGN UP
+router.post('/signup', async (req, res) => {
+    try {
+        const { username, name, email, password, role } = req.body;
+        const salt = bcrypt.genSaltSync(10);
+        const hashedPassword = bcrypt.hashSync(password, salt);
+
+        // if (!username ||!name || !email || !password || !role) {
+        //     return res.status(400).json({ message: "All fields are required" });
+        // }
+
+        let User;
+        if (role === 'student') {
+            User = StudentUser;
+        } else if (role === 'teacher') {
+            User = TeacherUser;
+        } 
+        else {
+            return res.status(400).json({ message: "Invalid role" });
+        }
+
+        const newUser = await User.create({ 
+            username,
+            name,
+            email, 
+            password: hashedPassword,
+            role
+        });
+
+        res.status(201).json({ message: "User created successfully", user: newUser });
+    } catch (error) {
+        res.status(500).json
+({ message: "Error creating user", error: error.message });
+}
+});
 
 module.exports = router;
