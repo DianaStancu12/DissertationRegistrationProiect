@@ -5,10 +5,17 @@ import SignUp from './components/SignUp';
 import {BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import StudentHomepage from './components/StudentHomepage'
 import TeacherHomePage from './components/TeacherHomepage';
+// import useCheckToken from './useCheckToken';
+// import { useSelector } from 'react-redux';
+// const {loggedIn, checkTokenLoading} = useSelector((state) => state.global);
 
 function App() {
 
+  // const [loading, setLoading] = useState(true);
+  // const [loggedIn, setLoggedIn] = useState(false);
+
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  //useCheckToken(setLoading, setLoggedIn);
 
   return (
     // <Router>
@@ -26,6 +33,7 @@ function App() {
     //     <Route path="/homepage" element={<Homepage />} />
     //   </Routes>
     // </Router>
+
     <Router>
       <Routes>
       <Route path="/signup" element={<SignUp/>} />
