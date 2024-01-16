@@ -1,4 +1,4 @@
-/* Stilul containerului */
+
 .signup-container {
     max-width: 400px;
     margin: 0 auto;
@@ -6,21 +6,19 @@
     text-align: center;
 }
 
-/* Stilul formularului */
 .signup-form {
     display: flex;
     flex-direction: column;
     gap: 15px;
 }
 
-/* Stilul câmpurilor de input */
 .signup-form input {
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
 }
 
-/* Stilul selectorului (dropdown) */
+
 .signup-form select {
     padding: 10px;
     border: 1px solid #ccc;

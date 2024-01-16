@@ -52,4 +52,13 @@ body {
   button:hover {
     background-color: #ddd;
   }
+
+  .requests-table {
+    flex-grow: 1;
+    margin-left: 20px;
+  }
   
+  .student-info {
+    display: flex;
+    justify-content: space-between;
+  }
