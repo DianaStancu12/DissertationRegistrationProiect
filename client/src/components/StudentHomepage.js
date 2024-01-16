@@ -29,9 +29,9 @@ const StudentHomepage = () => {
             const studentResponse = await fetch(port);
             const studentData = await studentResponse.json();
             setStudentName(studentData.data.name);
-            setHasCoordinator(studentData.data.TeacherUserId);
+            setHasCoordinator(studentData.data.teacherId);
 
-            console.log(studentData.data.TeacherUserId)
+            console.log('id prof' + studentData.data.teacherId)
             
             const professorsResponse = await fetch('http://localhost:5001/teachers/');
             const professorsData = await professorsResponse.json();
@@ -67,15 +67,23 @@ const StudentHomepage = () => {
 
   const handleRequestSubmission = async () => {
     try {
-      // Emularea unui apel către server pentru a trimite cererea
-      const response = await fetch('/api/submitequest', {
+
+      const token = localStorage.getItem('token');
+      const decodedToken = jwtDecode(token);
+
+      const studId = decodedToken.id;
+
+      // lets get teacher id
+      const response = await fetch('http://localhost:5001/requests', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          professor: selectedProfessor,
+          studentId: studId,
+          teacherId: selectedProfessor,
           thesisTitle,
+          statusRequest: 'Pending'
         }),
       });
 
@@ -104,7 +112,7 @@ const StudentHomepage = () => {
                     Alege profesorul
                   </option>
                   {availableProfessors.map((professor) => (
-                    <option key={professor.id} value={professor.name}>
+                    <option key={professor.id} value={professor.id}>
                       {professor.name}
                     </option>
                   ))}
@@ -114,7 +122,7 @@ const StudentHomepage = () => {
                 <input type="text" value={thesisTitle} onChange={(e) => setThesisTitle(e.target.value)} />
                 <label>Detalii despre lucrare</label>
                 <input type="text" value={thesisDetails} onChange={(e) => setThesisDetails(e.target.value)} />
-                <button onClick={handleRequestSubmission}>Trimite cererea</button>
+                <button onClick={handleRequestSubmission} disabled={hasCoordinator}>Trimite cererea</button>
               </div>
             )}
 

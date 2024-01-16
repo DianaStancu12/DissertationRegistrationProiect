@@ -4,6 +4,7 @@ const {handleErrorResponse} = require('../utils');
 const Request = require('../database/models/Request');
 const router = express.Router();
 
+// cererea este creata DOAR de student si acceptata doar de profesor -> deci post va fi la stud si put la prof
 router.post('/', async function (req, res) {
     try {
         const { studentId, teacherId, thesisTitle, statusRequest  } = req.body;
