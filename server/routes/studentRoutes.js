@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 const {handleErrorResponse, verifyToken} = require('../utils');
 
 const StudentUser = require('../database/models/StudentUser');
-
+const Request = require('../database/models/Request');
 const router = express.Router();
 
 //select *
@@ -82,5 +82,8 @@ router.put('/:id', async function (req, res) {
         handleErrorResponse(res, error, 'Error updating user');
     }
 })
+
+// put -> update requests table
+
 
 module.exports = router
