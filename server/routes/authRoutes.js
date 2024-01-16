@@ -35,6 +35,8 @@ router.post('/student/login', async function(req, res) {
             expiresIn: '1h'
         })
 
+        console.log(token);
+
         return res.status(200).json({success: true, message: "User logged in", data: token, user: user})
         //res.json({auth:true, token: token, result: user});
     } catch (error) {
@@ -74,6 +76,59 @@ router.post('/teacher/login', async function(req, res) {
     }
 })
 
+// sign in
+router.post('/signin', async (req, res) => {
+    try {
+        const {  email, password, role } = req.body;
+        const salt = bcrypt.genSaltSync(10);
+        const hashedPassword = bcrypt.hashSync(password, salt);
+
+        // if (!username ||!name || !email || !password || !role) {
+        //     return res.status(400).json({ message: "All fields are required" });
+        // }
+
+        let User;
+        if (role === 'student') {
+            User = StudentUser;
+        } else if (role === 'teacher') {
+            User = TeacherUser;
+        } 
+        else {
+            return res.status(400).json({ message: "Invalid role" });
+        }
+
+        const user = await User.findOne({
+            where: {
+                email: email
+            }
+        });
+
+        if(!user) {
+            return res.status(404).json({success: false, message: "User not found", data: {}});
+        }
+
+        const isValidPassword = bcrypt.compareSync(password, user.dataValues.password);
+
+        if(!isValidPassword) {
+            return res.status(400).json({success: false, message: "Invalid password", data: {}});
+        }
+
+        const id = user.dataValues.id;
+
+        const token = jwt.sign({id: id}, process.env.TOKEN_SECRET, {
+            expiresIn: '1h'
+        })
+
+        console.log(token);
+
+        return res.status(200).json({success: true, message: "User logged in", data: token, user: user})
+        
+    } catch (error) {
+        handleErrorResponse(res, error, 'Error logging in');
+}
+});
+
+
 //SIGN UP
 router.post('/signup', async (req, res) => {
     try {
@@ -109,6 +164,7 @@ router.post('/signup', async (req, res) => {
 ({ message: "Error creating user", error: error.message });
 }
 });
+
 router.post('/check', function (req, res) {
     const token = req.body.token;
 

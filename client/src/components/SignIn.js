@@ -31,7 +31,9 @@ export default function SignIn() {
   const [selectedUserType, setSelectedUserType] = React.useState(null); 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [role, setRole] = useState('student');
   const navigate = useNavigate();
+  
   let port = 'http://localhost:5001/auth/student/login';
   let path = '/student-homepage';
 
@@ -49,28 +51,39 @@ export default function SignIn() {
       
   // };
 
-  ///// trying again
+  const handleChange = (e) => {
+    // const { name, value } = e.target;
+    // setUser({ ...user, [name]: value });
+    setRole(e.target.value);
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
    // change port for diff users
-    const response = await fetch(port, {
+    const response = await fetch('http://localhost:5001/auth/signin', {
        method: 'POST',
        headers: {
          'Content-Type': 'application/json',
        },
-       body: JSON.stringify({ email, password }),
+       body: JSON.stringify({ email, password, role }),
     });
 
    
 
     if (response.ok) {
        const data = await response.json();
-       localStorage.setItem('token', data.token);
+       console.log(data);
+       localStorage.setItem('token', data.data);
        //window.location.href = '/';
        console.log(data.token)
-       navigate(path)
+
+       //navigate(path)
+       if(role === 'student')
+        navigate('/student-homepage');
+        else {
+          navigate('/teacher-homepage');
+        }
     } else {
        // Authentication failed
        console.error('Authentication failed');
@@ -138,7 +151,11 @@ export default function SignIn() {
             </FormControl>
             {/* <UserTypeSelector>onUserTypeSelected={handleUserType}</UserTypeSelector> */}
             {/* <UserTypeSelector> onUserTypeChange={setSelectedUserType} </UserTypeSelector> */}
-            <UserTypeSelector></UserTypeSelector>
+            {/* <UserTypeSelector></UserTypeSelector> */}
+            <select name="role" value={role} onChange={handleChange}>
+                <option value="student">Student</option>
+                <option value="teacher">Teacher</option>
+            </select>
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
