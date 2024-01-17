@@ -12,12 +12,16 @@ const TeacherHomepage = () => {
     const [refuseState, setRefuseState] = useState({ id: null, reasonReject: '' });
     const [buttonState, setButtonState] =useState('');
     const [requestId, setRequestId] = useState('');
-
+    const [studentId, setStudentId] = useState('');
+    const [acceptedRequest, setAcceptedRequest] = useState([]);
+    const [rejectedRequest, setRejectedRequest] = useState([])
 
 
     useEffect(() => {
         fetchTeacherData();
         fetchRequests();
+        fetchAcceptedRequests();
+        fetchRejectedRequests();
       }, []);
 
 
@@ -68,32 +72,92 @@ const TeacherHomepage = () => {
         
       }
 
-      const handleAccept = (requestId) => { 
+      const fetchAcceptedRequests = async () => {
+
+        try {
+          const token = localStorage.getItem('token');
+          const decodedToken = jwtDecode(token);
+    
+          const teacherId = decodedToken.id;
+          const port = 'http://localhost:5001/requests/acceptedRequests/' + teacherId;
+    
+          const requestResponse = await fetch(port);
+          const requestData = await requestResponse.json();
+          console.log(requestData)
+          setAcceptedRequest(requestData.data);
+    
+          setLoadingRequests(false);
+        }
+        catch(error) {
+          console.error('Error fetching requests:' , error)
+        }
+    
+        
+      }
+
+      const fetchRejectedRequests = async () => {
+
+        try {
+          const token = localStorage.getItem('token');
+          const decodedToken = jwtDecode(token);
+    
+          const teacherId = decodedToken.id;
+          const port = 'http://localhost:5001/requests/rejectedRequests/' + teacherId;
+    
+          const requestResponse = await fetch(port);
+          const requestData = await requestResponse.json();
+          console.log(requestData)
+          setRejectedRequest(requestData.data);
+    
+          setLoadingRequests(false);
+        }
+        catch(error) {
+          console.error('Error fetching requests:' , error)
+        }
+    
+        
+      }
+
+
+      const handleAccept = async (requestId) => { 
         setButtonState(true);
         console.log('Accepted request:', requestId);
         setRequestId(requestId);
+
+        await new Promise(resolve => setTimeout(resolve, 0));
+
         handleRequestSubmission();
         console.log('Am acceptat')
     };
 
-    const handleDeny =  (id) => {
+    const handleDeny = async (id) => {
         setRefuseState({ ...refuseState, id });
         console.log('Am refuzat')
         setButtonState(false);
         setRequestId(requestId);
+
+        await new Promise(resolve => setTimeout(resolve, 0));
        
     };
 
-    const handleReasonChange = (e) => {
+    const handleReasonChange = async (e) => {
         setRefuseState({ ...refuseState, reasonReject: e.target.value });
         console.log('Am trm motivul')
+
+        await new Promise(resolve => setTimeout(resolve, 0));
+
     };
 
-    const submitRefusal =  (id) => {
+    const submitRefusal = async (id) => {
         console.log('Refused request:', id, 'Reason:', refuseState.reasonReject);
         // Aici implementați logica pentru a trimite refuzul și motivul la server
+        
+
         // După trimitere, ascundeți textbox-ul
         setRefuseState({ id: null, reasonReject: '' });
+
+        await new Promise(resolve => setTimeout(resolve, 0));
+
         handleRequestSubmission();
     };
 
@@ -105,7 +169,8 @@ const TeacherHomepage = () => {
             const teacherId = decodedToken.id;
             console.log(teacherId);
 
-            const studentId= requests.find((req) => req.id === requestId).studentId;
+            //const id= requests.find((req) => req.id === requestId).studentId;
+            
             console.log('ID STUD:' + studentId);
             console.log('Button: '+  status(buttonState));
             console.log('Motiv: '+ refuseState.reasonReject);
@@ -126,6 +191,8 @@ const TeacherHomepage = () => {
           if (response.ok) {
             console.log('Raspunsul a fost trimis cu succes!');
             await fetchRequests();
+            await fetchAcceptedRequests();
+            await fetchRejectedRequests();
           } else {
             console.error('Trimiterea raspunsului a eșuat.');
           }
@@ -182,8 +249,8 @@ return (
                         </div>
                     )}
             <td>
-    <button onClick={() => handleAccept(request.id)}>Acceptă</button>
-    <button onClick={() => handleDeny(request.id)}>Refuză</button>
+    <button onClick={() => {setStudentId(request.studentId); handleAccept(request.id)}}>Acceptă</button>
+    <button onClick={() => {setStudentId(request.studentId); handleDeny(request.id)}}>Refuză</button>
     </td>
     </tr>
     ))}
@@ -191,10 +258,52 @@ return (
     </table>
 )}
 
-    <h2>Lista elevi acceptati</h2>
+<h2>Lista elevi acceptati</h2> 
+     {loadingRequests ? (
+                <p>Loading requests...</p>) : (
+    <table className="requests-table">
+             <thead>
+              <tr>
+                <th>Nume Student</th>
+                <th>Titlul lucrarii</th>
+              </tr>
+            </thead>
+    <tbody>
+    {acceptedRequest.map(request => (
+        <tr key={request.id}>
+            <td>{getStudName(request.studentId)}</td>
+            <td>{request.thesisTitle}</td>
 
 
+    </tr>
+    ))}
+    </tbody>
+    </table>
+)}
+<h2>Lista elevi neacceptati</h2>
+    {loadingRequests ? (
+                <p>Loading requests...</p>) : (
+    <table className="requests-table">
+             <thead>
+              <tr>
+                <th>Nume Student</th>
+                <th>Titlul lucrarii</th>
+                <th>Motiv respingere</th>
+              </tr>
+            </thead>
+    <tbody>
+    {rejectedRequest.map(request => (
+        <tr key={request.id}>
+            <td>{getStudName(request.studentId)}</td>
+            <td>{request.thesisTitle}</td>
+            <td>{request.reasonReject}</td>
 
+    </tr>
+    ))}
+    </tbody>
+    </table>
+)}
+    
     
     </div>
 

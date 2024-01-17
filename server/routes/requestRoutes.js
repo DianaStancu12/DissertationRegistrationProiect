@@ -50,7 +50,8 @@ router.get('/teacherRequests/:teachId', async function (req, res) {
 
         const requests = await Request.findAll({
             where : {
-                teacherId: teachId
+                teacherId: teachId,
+                statusRequest: 'Pending'
             }
         })
 
@@ -64,6 +65,51 @@ router.get('/teacherRequests/:teachId', async function (req, res) {
         handleErrorResponse(res, error, 'Error finding teacher requests');
     }
 })
+
+router.get('/acceptedRequests/:teachId', async function (req, res) {
+    try {
+        const teachId = req.params.teachId;
+
+        const requests = await Request.findAll({
+            where : {
+                teacherId: teachId,
+                statusRequest: 'Approved'
+            }
+        })
+
+
+        if (!requests) {
+            res.status(404).json({ success: false, message: 'Error finding requests for this teacher', data: {} });
+        }
+
+        res.status(200).json({ success: true, message: 'Requests were found', data: requests })
+    } catch (error) {
+        handleErrorResponse(res, error, 'Error finding teacher requests');
+    }
+})
+
+router.get('/rejectedRequests/:teachId', async function (req, res) {
+    try {
+        const teachId = req.params.teachId;
+
+        const requests = await Request.findAll({
+            where : {
+                teacherId: teachId,
+                statusRequest: 'Rejected'
+            }
+        })
+
+
+        if (!requests) {
+            res.status(404).json({ success: false, message: 'Error finding requests for this teacher', data: {} });
+        }
+
+        res.status(200).json({ success: true, message: 'Requests were found', data: requests })
+    } catch (error) {
+        handleErrorResponse(res, error, 'Error finding teacher requests');
+    }
+})
+
 
 // put -> update when a teacher approves or rejects a request
 router.put('/update/:studId/:teacherId', async (req, res) => {
@@ -110,5 +156,7 @@ router.put('/update/:studId/:teacherId', async (req, res) => {
       return res.status(500).json({ success: false, message: 'Eroare la actualizarea cererii', data: {} });
     }
   });
+
+
 
 module.exports = router
