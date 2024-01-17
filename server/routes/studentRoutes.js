@@ -64,6 +64,7 @@ router.post('/', async function (req, res) {
 router.put('/:id', async function (req, res) {
     try {
         const id = req.params.id;
+        const {teacherId, email, name }= req.body
 
         const user = await StudentUser.findByPk(id, {
             attributes: { exclude: ['password'] }
@@ -73,11 +74,16 @@ router.put('/:id', async function (req, res) {
             res.status(404).json({ success: false, message: 'Error finding user', data: {} });
         }
 
-        const updatedUser = await user.update(req.body, {
-            attributes: { exclude: ['password'] }
-        });
+        // const updatedUser = await user.update(req.body, {
+        //     attributes: { exclude: ['password'] }
+        // });
 
-        res.status(200).json({ success: true, message: "User updated", data: updatedUser });
+        user.teacherId = teacherId;
+        user.email = email;
+        user.name = name;
+        await user.save();
+
+        res.status(200).json({ success: true, message: "User updated", data: user });
     } catch (error) {
         handleErrorResponse(res, error, 'Error updating user');
     }

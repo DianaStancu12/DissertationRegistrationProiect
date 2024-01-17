@@ -83,10 +83,6 @@ router.post('/signin', async (req, res) => {
         const salt = bcrypt.genSaltSync(10);
         const hashedPassword = bcrypt.hashSync(password, salt);
 
-        // if (!username ||!name || !email || !password || !role) {
-        //     return res.status(400).json({ message: "All fields are required" });
-        // }
-
         let User;
         if (role === 'student') {
             User = StudentUser;

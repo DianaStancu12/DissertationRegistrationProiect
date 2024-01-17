@@ -37,23 +37,8 @@ export default function SignIn() {
   let port = 'http://localhost:5001/auth/student/login';
   let path = '/student-homepage';
 
-  //
-
-  // const handleUserType = (userType) => {
-  //   if(userType == 'student') {
-  //     port = 'http://localhost:5001/auth/student/login';
-  //     path = '/student-homepage';
-  //   }  
-  //   else {
-  //     port = 'http://localhost:5001/auth/teacher/login';
-  //     path = '/teacher-homepage';
-  //   }
-      
-  // };
 
   const handleChange = (e) => {
-    // const { name, value } = e.target;
-    // setUser({ ...user, [name]: value });
     setRole(e.target.value);
   };
 
@@ -78,7 +63,6 @@ export default function SignIn() {
        //window.location.href = '/';
        console.log(data.token)
 
-       //navigate(path)
        if(role === 'student')
         navigate('/student-homepage');
         else {
@@ -87,6 +71,7 @@ export default function SignIn() {
     } else {
        // Authentication failed
        console.error('Authentication failed');
+       alert('Authentification failed. Please check sign in')
     }
    };
 
