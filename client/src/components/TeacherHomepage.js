@@ -42,7 +42,6 @@ const TeacherHomepage = () => {
                 const studsData = await students.json();
                 setAvailableStudents(studsData);
                 console.log(studsData);
-             
 
         } catch (error) {
           console.error('Error fetching student data:', error);
@@ -137,7 +136,6 @@ const TeacherHomepage = () => {
         setRequestId(requestId);
 
         await new Promise(resolve => setTimeout(resolve, 0));
-       
     };
 
     const handleReasonChange = async (e) => {
@@ -150,10 +148,7 @@ const TeacherHomepage = () => {
 
     const submitRefusal = async (id) => {
         console.log('Refused request:', id, 'Reason:', refuseState.reasonReject);
-        // Aici implementați logica pentru a trimite refuzul și motivul la server
-        
 
-        // După trimitere, ascundeți textbox-ul
         setRefuseState({ id: null, reasonReject: '' });
 
         await new Promise(resolve => setTimeout(resolve, 0));
@@ -169,8 +164,6 @@ const TeacherHomepage = () => {
             const teacherId = decodedToken.id;
             console.log(teacherId);
 
-            //const id= requests.find((req) => req.id === requestId).studentId;
-            
             console.log('ID STUD:' + studentId);
             console.log('Button: '+  status(buttonState));
             console.log('Motiv: '+ refuseState.reasonReject);
@@ -181,9 +174,8 @@ const TeacherHomepage = () => {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-             statusRequest: status(buttonState),
-             reasonReject:  refuseState.reasonReject,
-    
+            statusRequest: status(buttonState),
+            reasonReject:  refuseState.reasonReject,
     
             }),
           });
@@ -219,13 +211,12 @@ return (
     <div>
     
     <h1>Bun venit, {teacherName}!</h1>
-    <h3> Numarul locurilor disponibile: </h3>
 
     <h2>Cereri</h2>
     {loadingRequests ? (
                 <p>Loading requests...</p>) : (
     <table className="requests-table">
-             <thead>
+            <thead>
               <tr>
                 <th>Nume Student</th>
                 <th>Titlul lucrarii</th>
@@ -258,11 +249,11 @@ return (
     </table>
 )}
 
-<h2>Lista elevi acceptati</h2> 
-     {loadingRequests ? (
+<h2>Lista studenti acceptati</h2> 
+    {loadingRequests ? (
                 <p>Loading requests...</p>) : (
     <table className="requests-table">
-             <thead>
+            <thead>
               <tr>
                 <th>Nume Student</th>
                 <th>Titlul lucrarii</th>
@@ -280,11 +271,11 @@ return (
     </tbody>
     </table>
 )}
-<h2>Lista elevi neacceptati</h2>
+<h2>Lista studenti neacceptati</h2>
     {loadingRequests ? (
                 <p>Loading requests...</p>) : (
     <table className="requests-table">
-             <thead>
+            <thead>
               <tr>
                 <th>Nume Student</th>
                 <th>Titlul lucrarii</th>
@@ -307,7 +298,6 @@ return (
     
     </div>
 
-   
 );
 };
 

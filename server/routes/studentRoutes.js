@@ -89,7 +89,5 @@ router.put('/:id', async function (req, res) {
     }
 })
 
-// put -> update requests table
-
 
 module.exports = router

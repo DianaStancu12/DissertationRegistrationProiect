@@ -69,11 +69,11 @@ body {
 }
 
 .requests-table th, .requests-table td {
-    border: 1px solid #ddd; /* Linii de delimitare pentru celule */
+    border: 1px solid #ddd; 
     padding: 8px;
 }
 
 .requests-table th {
-    background-color: #f2f2f2; /* Culoare de fundal pentru antetul tabelului */
+    background-color: #f2f2f2; 
     text-align: left;
 }

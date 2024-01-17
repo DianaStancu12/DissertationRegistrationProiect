@@ -73,7 +73,7 @@ const StudentHomepage = () => {
 
       const studId = decodedToken.id;
 
-      // lets get teacher id
+
       const response = await fetch('http://localhost:5001/requests', {
         method: 'POST',
         headers: {

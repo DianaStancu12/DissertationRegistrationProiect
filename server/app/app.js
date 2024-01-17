@@ -8,7 +8,7 @@ const teacherRoutes = require('../routes/teacherRoutes')
 const authRoutes = require('../routes/authRoutes')
 const requestRoutes = require('../routes/requestRoutes')
 const {verifyToken} = require('../utils');
-// token
+
 
 dotenv.config();
 app.use(cors());
@@ -20,6 +20,5 @@ app.use('/teachers', teacherRoutes)
 app.use('/auth', authRoutes)
 app.use('/requests', requestRoutes )
 
-// adauga rute
 
 module.exports = app

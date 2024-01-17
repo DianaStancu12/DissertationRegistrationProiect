@@ -125,7 +125,6 @@ router.post('/signin', async (req, res) => {
 });
 
 
-//SIGN UP
 router.post('/signup', async (req, res) => {
     try {
         const { username, name, email, password, role } = req.body;

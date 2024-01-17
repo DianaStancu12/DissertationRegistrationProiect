@@ -6,7 +6,6 @@ const UserTypeSelector = () => {
 
   const handleButtonClick = (userType) => {
     setSelectedUserType(userType);
-    //onUserTypeSelected(userType);
   };
 
 

@@ -22,21 +22,21 @@ router.get('/', async function (req, res) {
 
 // select by id for heading
 router.get('/:id', async function (req, res) {
-  try {
-      const id = req.params.id;
+try {
+    const id = req.params.id;
 
-      const user = await TeacherUser.findByPk(id, {
-          attributes: { exclude: ['password'] }
-      });
+    const user = await TeacherUser.findByPk(id, {
+        attributes: { exclude: ['password'] }
+    });
 
-      if (!user) {
-          res.status(404).json({ success: false, message: 'Error finding user', data: {} });
-      }
+    if (!user) {
+        res.status(404).json({ success: false, message: 'Error finding user', data: {} });
+    }
 
-      res.status(200).json({ success: true, message: 'User was found', data: user })
-  } catch (error) {
-      handleErrorResponse(res, error, 'Error finding user');
-  }
+    res.status(200).json({ success: true, message: 'User was found', data: user })
+} catch (error) {
+    handleErrorResponse(res, error, 'Error finding user');
+}
 })
 
 // insert
@@ -65,27 +65,25 @@ router.put('/:id', async (req, res) => {
     const id = req.params.id;
     const { email, name } = req.body;
     
-  
+
     try {
-      // Găsește cererea în baza de date
-      const user = await TeacherUser.findByPk(id, {
+    const user = await TeacherUser.findByPk(id, {
         attributes: { exclude: ['password'] }
     });
-  
-      if (!user) {
+
+    if (!user) {
         return res.status(404).json({ success: false, message: 'Cererea nu a fost găsită', data: {} });
-      }
-  
-      // Actualizează starea cererii
-      user.email = email;
-      user.name = name;
-      await user.save();
-  
-      return res.status(200).json({ success: true, message: 'Cererea a fost actualizată cu succes', data: user });
-    } catch (error) {
-      console.error('Error updating request:', error);
-      return res.status(500).json({ success: false, message: 'Eroare la actualizarea cererii', data: {} });
     }
-  });
+
+    user.email = email;
+    user.name = name;
+    await user.save();
+
+    return res.status(200).json({ success: true, message: 'Cererea a fost actualizată cu succes', data: user });
+    } catch (error) {
+    console.error('Error updating request:', error);
+    return res.status(500).json({ success: false, message: 'Eroare la actualizarea cererii', data: {} });
+    }
+});
 
 module.exports = router

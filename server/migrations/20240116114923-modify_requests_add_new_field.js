@@ -6,16 +6,11 @@ module.exports = {
     return queryInterface.addColumn(
       'Request',
       'thesisDetails',
-     Sequelize.STRING
+    Sequelize.STRING
     );
   },
 
   async down (queryInterface, Sequelize) {
-    /**
-     * Add reverting commands here.
-     *
-     * Example:
-     * await queryInterface.dropTable('users');
-     */
+    
   }
 };

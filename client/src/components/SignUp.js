@@ -1,4 +1,4 @@
-// SignUp.js
+
 import React, { useState } from 'react';
 import './SignUp.css';
 import Avatar from '@mui/material/Avatar';
@@ -30,8 +30,7 @@ const SignUp = () => {
         name:'',
         email: '',
         password: '',
-       
-        role: 'student' // default role
+        role: 'student' 
     });
 
     const handleChange = (e) => {
@@ -41,14 +40,14 @@ const SignUp = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-       
+
         const { username, name, email, password, role } = user;
     if (!username || !name || !email || !password || !role) {
         alert("Te rog să completezi toate câmpurile!");
         return;
     }
 
-    // Trimitere date la server
+
     try {
         const response = await fetch('http://localhost:5001/auth/signup', {
             method: 'POST',
@@ -65,7 +64,7 @@ const SignUp = () => {
 
         alert('Contul a fost creat cu succes!');
         
-         navigate('/');
+        navigate('/');
 
 
         const data = await response.json();
@@ -82,26 +81,26 @@ const SignUp = () => {
 
     return (
         <ThemeProvider theme={defaultTheme}>
-          <Container component="main" maxWidth="xs">
-             <CssBaseline />
+        <Container component="main" maxWidth="xs">
+            <CssBaseline />
         <Box
-          sx={{
+        sx={{
             marginTop: 8,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-          }}
+        }}
         >
 
         <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
             <LockOutlinedIcon />
-          </Avatar>
+        </Avatar>
         <Typography component="h1" variant="h5" align='center'>
             Sign up
-          </Typography>
-          </Box>
+        </Typography>
+        </Box>
 
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}></Box>
+        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}></Box>
         <form onSubmit={handleSubmit} className="signup-form">
         <input
                 type="username"

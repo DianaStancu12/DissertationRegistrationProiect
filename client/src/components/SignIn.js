@@ -20,9 +20,9 @@ import UserTypeSelector from './UserTypeSelector';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-//
+
 import { Link as RouerLink} from 'react-router-dom';
-// TODO remove, this demo shouldn't need to reset the theme.
+
 
 const defaultTheme = createTheme();
 
@@ -45,35 +45,35 @@ export default function SignIn() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-   // change port for diff users
+
     const response = await fetch('http://localhost:5001/auth/signin', {
-       method: 'POST',
-       headers: {
-         'Content-Type': 'application/json',
-       },
-       body: JSON.stringify({ email, password, role }),
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password, role }),
     });
 
-   
+
 
     if (response.ok) {
-       const data = await response.json();
-       console.log(data);
-       localStorage.setItem('token', data.data);
-       //window.location.href = '/';
-       console.log(data.token)
+      const data = await response.json();
+      console.log(data);
+      localStorage.setItem('token', data.data);
 
-       if(role === 'student')
+      console.log(data.token)
+
+      if(role === 'student')
         navigate('/student-homepage');
         else {
           navigate('/teacher-homepage');
         }
     } else {
-       // Authentication failed
-       console.error('Authentication failed');
-       alert('Authentification failed. Please check sign in')
+
+      console.error('Authentication failed');
+      alert('Authentification failed. Please check sign in')
     }
-   };
+  };
 
   return (
     <ThemeProvider theme={defaultTheme}>
