@@ -11,6 +11,10 @@ const TeacherUser = sequelize.define("TeacherUser", {
     password: Sequelize.STRING, 
     name: Sequelize.STRING,
     email: Sequelize.STRING, 
+    // locuriDisponibile: {
+    //     type: Sequelize.INTEGER,
+    //     defaultValue: 20 
+    // }
 });
 
 module.exports = TeacherUser;
