@@ -65,7 +65,7 @@ body {
 
   .requests-table {
     width: 100%;
-    border-collapse: collapse; /* Elimină spațiul dintre celule */
+    border-collapse: collapse; 
 }
 
 .requests-table th, .requests-table td {

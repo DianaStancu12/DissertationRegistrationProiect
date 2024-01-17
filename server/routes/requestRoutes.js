@@ -2,6 +2,7 @@ const express = require('express');
 const {handleErrorResponse} = require('../utils');
 
 const Request = require('../database/models/Request');
+const StudentUser = require('../database/models/StudentUser');
 const router = express.Router();
 
 // cererea este creata DOAR de student si acceptata doar de profesor -> deci post va fi la stud si put la prof
@@ -53,6 +54,7 @@ router.get('/teacherRequests/:teachId', async function (req, res) {
             }
         })
 
+
         if (!requests) {
             res.status(404).json({ success: false, message: 'Error finding requests for this teacher', data: {} });
         }
@@ -78,6 +80,13 @@ router.put('/update/:studId/:teacherId', async (req, res) => {
           teacherId: teacherId,
         },
       });
+
+      const studUser = await StudentUser.findByPk(studId, {
+        attributes: { exclude: ['password'] }
+        });
+
+        console.log('Studentul nostru: ', studUser);
+        console.log('id student' , studId);
   
       if (!request) {
         return res.status(404).json({ success: false, message: 'Cererea nu a fost găsită', data: {} });
@@ -87,7 +96,14 @@ router.put('/update/:studId/:teacherId', async (req, res) => {
       request.statusRequest = statusRequest;
       request.reasonReject = reasonReject;
       await request.save();
-  
+
+      if(statusRequest === 'Approved') {
+        studUser.teacherId = teacherId;
+        console.log('stud actualizat', studUser)
+        await studUser.save();
+      }
+      
+      
       return res.status(200).json({ success: true, message: 'Cererea a fost actualizată cu succes', data: request });
     } catch (error) {
       console.error('Error updating request:', error);

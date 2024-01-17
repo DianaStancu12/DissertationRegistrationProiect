@@ -53,11 +53,23 @@ body {
     background-color: #ddd;
   }
 
-  .requests-table {
+  .student-requests {
+    flex-grow: 1;
+    margin-left: 20px;
     flex-grow: 1;
     margin-left: 20px;
   }
   
+  .student-requests th, .student-requests td {
+    border: 1px solid #ddd; 
+    padding: 8px;
+}
+
+.student-requests th {
+    background-color: #f2f2f2; 
+    text-align: left;
+}
+
   .student-info {
     display: flex;
     justify-content: space-between;
