@@ -73,10 +73,12 @@ const TeacherHomepage = () => {
         console.log('Accepted request:', requestId);
         setRequestId(requestId);
         handleRequestSubmission();
+        console.log('Am acceptat')
     };
 
-    const handleDeny = (id) => {
+    const handleDeny =  (id) => {
         setRefuseState({ ...refuseState, id });
+        console.log('Am refuzat')
         setButtonState(false);
         setRequestId(requestId);
        
@@ -84,9 +86,10 @@ const TeacherHomepage = () => {
 
     const handleReasonChange = (e) => {
         setRefuseState({ ...refuseState, reasonReject: e.target.value });
+        console.log('Am trm motivul')
     };
 
-    const submitRefusal = (id) => {
+    const submitRefusal =  (id) => {
         console.log('Refused request:', id, 'Reason:', refuseState.reasonReject);
         // Aici implementați logica pentru a trimite refuzul și motivul la server
         // După trimitere, ascundeți textbox-ul
@@ -100,6 +103,7 @@ const TeacherHomepage = () => {
             const token = localStorage.getItem('token');
             const decodedToken = jwtDecode(token);
             const teacherId = decodedToken.id;
+            console.log(teacherId);
 
             const studentId= requests.find((req) => req.id === requestId).studentId;
             console.log('ID STUD:' + studentId);
@@ -121,6 +125,7 @@ const TeacherHomepage = () => {
     
           if (response.ok) {
             console.log('Raspunsul a fost trimis cu succes!');
+            await fetchRequests();
           } else {
             console.error('Trimiterea raspunsului a eșuat.');
           }

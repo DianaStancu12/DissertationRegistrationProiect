@@ -89,6 +89,8 @@ const StudentHomepage = () => {
 
       if (response.ok) {
         console.log('Cererea a fost trimisă cu succes!');
+
+      await fetchRequests();
       } else {
         console.error('Trimiterea cererii a eșuat.');
       }
